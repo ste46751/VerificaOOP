@@ -8,19 +8,19 @@ namespace VerificaOOP
 {
     public class Persona
     {
-        private string nome;
+        public string nome;
 
-        public Persona() 
+        public Persona()
         {
 
             nome = "user";
-        }    
+        }
         public string Nome
         {
             get { return nome; }
             set
             {
-                if ( nome.Length > 2)
+                if (nome.Length > 2)
                 {
                     nome = value;
                 }
@@ -46,7 +46,7 @@ namespace VerificaOOP
             set { chiu = value; }
         }
 
-        
+
         public float Saldo
         {
             get { return _saldo; }
@@ -61,13 +61,13 @@ namespace VerificaOOP
             Saldo = 0;
             Chiu = true;
         }
-        public void deposita(float c) 
+        public void deposita(float c)
         {
             Saldo += c;
         }
         public void preleva(float p)
         {
-            if(Saldo>p)
+            if (Saldo > p)
             {
                 Saldo -= p;
             }
@@ -76,7 +76,7 @@ namespace VerificaOOP
                 Console.WriteLine("Non puoi prelevare questa somma perchè il suo saldo non è sufficiente");
             }
 
-           
+
         }
         public float saldo()
         {
@@ -85,26 +85,54 @@ namespace VerificaOOP
 
         public string stato()
         {
-            if(Chiu==false)
+            if (Chiu == false)
             {
                 return "aperto";
             }
-            else 
+            else
             {
                 return "chiuso";
             }
         }
+
+    }
+    public class Banca
+    {
+        private Conto[] arr=new Conto[100];
+        public int p = 0;
+
+        public void Apri()
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = new Conto();
+            }
+        }
+        public void ApriConto(string _nome)
+        {
+            arr[p].apri();
+            arr[p].Nome = _nome;
+        }
+        public void ChiudiConto()
+        {
+            arr[p].chiudi();
+            arr[p].Nome ="";
+        }
         
+
     }
     internal class Program
     {
         static void Main(string[] args)
         {
             Conto conto = new Conto();
+            Banca banca = new Banca();
 
             Console.WriteLine("Inserisci il nome");
             string n = Console.ReadLine();
             conto.Nome = n;
+
+            string nome = "";
 
             bool uscita = false;
 
@@ -118,6 +146,7 @@ namespace VerificaOOP
                     while (uscita == false)
                     {
                         Console.Clear();
+                        Console.WriteLine("CONTO");
                         Console.WriteLine("1) Apri conto");
                         Console.WriteLine("2) Azzera il conto");
                         Console.WriteLine("3) Deposita sul conto");
@@ -179,10 +208,76 @@ namespace VerificaOOP
                         }
                     }
                 }
-                else
+                else if (r == "2")
                 {
+                    while (uscita == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("BANCA");
+                        Console.WriteLine("1) Apri conto");
+                        Console.WriteLine("2) Ciudi conto");
+                        Console.WriteLine("3) Deposita sul conto");
+                        Console.WriteLine("4) Preleva dal conto");
+                        Console.WriteLine("5) Vedi saldo sul conto");
+                        Console.WriteLine("6) Visualizza info conto");
+                        Console.WriteLine("Altri Tasti) Esci");
 
+                        switch (Console.ReadLine())
+                        {
+                            case "1":
+                                if (conto.Chiu == false)
+                                {
+                                    Console.WriteLine("Il conto è già aperto");
+                                }
+                                else if (conto.Chiu == true)
+                                {
+                                    Console.WriteLine("Inserisci nome");
+                                    nome=Console.ReadLine();
+                                    banca.Apri(nome);
+                                    Console.WriteLine("Il conto è stato aperto");
+                                    Console.ReadLine();
+                                }
+                                break;
+
+                            case "2":
+                                conto.chiudi();
+                                Console.WriteLine("Il conto è stato chiuso");
+                                Console.ReadLine();
+                                break;
+
+                            case "3":
+                                Console.WriteLine("Inserisci la somma da depositare");
+                                float c = int.Parse(Console.ReadLine());
+                                conto.deposita(c);
+                                Console.WriteLine("Il saldo è stato incrementato");
+                                Console.ReadLine();
+                                break;
+
+                            case "4":
+                                Console.WriteLine("Inserisci la somma da prelevare");
+                                float p = int.Parse(Console.ReadLine());
+                                conto.preleva(p);
+                                Console.WriteLine("Il saldo è stato decrementato");
+                                Console.ReadLine();
+                                break;
+
+                            case "5":
+                                Console.WriteLine($"Saldo attuale: {conto.saldo()} euro");
+                                Console.ReadLine();
+                                break;
+
+                            case "6":
+                                Console.WriteLine($"Nome: {conto.Nome}\nStato conto: {conto.stato()}\nSaldo: {conto.Saldo}");
+                                Console.ReadLine();
+                                break;
+
+                            default:
+                                uscita = true;
+                                break;
+                        }
+                    }
                 }
+                else { }
             }
             else
             {
