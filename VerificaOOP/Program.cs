@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -99,7 +100,6 @@ namespace VerificaOOP
     public class Banca
     {
         private Conto[] arr=new Conto[100];
-        public int p = 0;
 
         public void Apri()
         {
@@ -108,17 +108,65 @@ namespace VerificaOOP
                 arr[i] = new Conto();
             }
         }
+        public int Ricerca(string _nome)
+        {
+            int pos = -1;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i].Nome == "user")
+                {
+                    arr[i].Nome = _nome;
+                    pos = i;
+                    break;
+                }
+                else if (arr[i].Nome == _nome)
+                {
+                    pos = i;
+                    break;
+                }
+               
+            }
+            return pos;
+        }
         public void ApriConto(string _nome)
         {
-            arr[p].apri();
-            arr[p].Nome = _nome;
+            int pos = Ricerca(_nome);
+            arr[pos].apri();
+            arr[pos].Nome=_nome;
+            Console.WriteLine($"Il conto di {_nome} è stato aperto");
+               
+            
         }
-        public void ChiudiConto()
+        public void ChiudiConto(string _nome)
         {
-            arr[p].chiudi();
-            arr[p].Nome ="";
+            int pos = Ricerca(_nome);
+            arr[pos].chiudi();
+            arr[pos].Nome = _nome;
+            Console.WriteLine($"Il conto di {_nome} è stato aperto");
         }
-        
+        public void DepositaSuConto(string _nome, float c)
+        {
+            int pos = Ricerca(_nome);
+            arr[pos].deposita(c);
+            Console.WriteLine($"Sul conto sono stati depositati {arr[pos].Saldo} euro");
+        }
+
+        public void PrelevaDalConto(string _nome, float c)
+        {
+            int pos = Ricerca(_nome);
+            arr[pos].preleva(c);
+            Console.WriteLine($"Dal conto sono stati prelevati {arr[pos].Saldo} euro");
+        }
+        public void VediSaldoConto(string _nome)
+        {
+            int pos = Ricerca(_nome);
+            Console.WriteLine($"Il saldo equivale { arr[pos].saldo()} euro");
+        }
+        public void VediInfoConto(string _nome)
+        {
+            int pos = Ricerca(_nome);
+            Console.WriteLine($"Info:\nStato conto:{arr[pos].stato()}\nSaldo:{arr[pos].saldo()} euro");
+        }
 
     }
     internal class Program
@@ -128,16 +176,14 @@ namespace VerificaOOP
             Conto conto = new Conto();
             Banca banca = new Banca();
 
-            Console.WriteLine("Inserisci il nome");
-            string n = Console.ReadLine();
-            conto.Nome = n;
-
             string nome = "";
 
             bool uscita = false;
 
             Console.WriteLine("Menu:\n1)Conto\n2)Banca");
             string r=Console.ReadLine();
+
+            banca.Apri();
 
             if(r=="1" || r=="2")
             {
@@ -215,7 +261,7 @@ namespace VerificaOOP
                         Console.Clear();
                         Console.WriteLine("BANCA");
                         Console.WriteLine("1) Apri conto");
-                        Console.WriteLine("2) Ciudi conto");
+                        Console.WriteLine("2) Chiudi conto");
                         Console.WriteLine("3) Deposita sul conto");
                         Console.WriteLine("4) Preleva dal conto");
                         Console.WriteLine("5) Vedi saldo sul conto");
@@ -233,41 +279,48 @@ namespace VerificaOOP
                                 {
                                     Console.WriteLine("Inserisci nome");
                                     nome=Console.ReadLine();
-                                    banca.Apri(nome);
+                                    banca.ApriConto(nome);
                                     Console.WriteLine("Il conto è stato aperto");
                                     Console.ReadLine();
                                 }
                                 break;
 
                             case "2":
-                                conto.chiudi();
+                                Console.WriteLine("Inserisci nome");
+                                banca.ChiudiConto(nome);
                                 Console.WriteLine("Il conto è stato chiuso");
                                 Console.ReadLine();
                                 break;
 
                             case "3":
+                                Console.WriteLine("Inserisci nome");
+                                nome = Console.ReadLine();
                                 Console.WriteLine("Inserisci la somma da depositare");
-                                float c = int.Parse(Console.ReadLine());
-                                conto.deposita(c);
-                                Console.WriteLine("Il saldo è stato incrementato");
+                                float c = float.Parse(Console.ReadLine());
+                                banca.DepositaSuConto(nome,c);
                                 Console.ReadLine();
                                 break;
 
                             case "4":
+                                Console.WriteLine("Inserisci nome");
+                                nome = Console.ReadLine();
                                 Console.WriteLine("Inserisci la somma da prelevare");
-                                float p = int.Parse(Console.ReadLine());
-                                conto.preleva(p);
-                                Console.WriteLine("Il saldo è stato decrementato");
+                                float n = float.Parse(Console.ReadLine());
+                                banca.PrelevaDalConto(nome, n);
                                 Console.ReadLine();
                                 break;
 
                             case "5":
-                                Console.WriteLine($"Saldo attuale: {conto.saldo()} euro");
+                                Console.WriteLine("Inserisci nome");
+                                nome = Console.ReadLine();
+                                banca.VediSaldoConto(nome);
                                 Console.ReadLine();
                                 break;
 
                             case "6":
-                                Console.WriteLine($"Nome: {conto.Nome}\nStato conto: {conto.stato()}\nSaldo: {conto.Saldo}");
+                                Console.WriteLine("Inserisci nome");
+                                nome = Console.ReadLine();
+                                banca.VediInfoConto(nome);
                                 Console.ReadLine();
                                 break;
 
