@@ -99,27 +99,29 @@ namespace VerificaOOP
     }
     public class Banca
     {
-        private Conto[] arr=new Conto[100];
+        List<Conto> contos = new List<Conto>();
+        //private Conto[] arr=new Conto[100];
 
         public void Apri()
         {
-            for (int i = 0; i < arr.Length; i++)
+            contos.Add(new Conto());
+            /*for (int i = 0; i < arr.Length; i++)
             {
                 arr[i] = new Conto();
-            }
+            }*/
         }
         public int Ricerca(string _nome)
         {
             int pos = -1;
-            for (int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < contos.Count; i++)
             {
-                if (arr[i].Nome == "user")
+                if (contos[i].Nome == "user")
                 {
-                    arr[i].Nome = _nome;
+                    contos[i].Nome = _nome;
                     pos = i;
                     break;
                 }
-                else if (arr[i].Nome == _nome)
+                else if (contos[i].Nome == _nome)
                 {
                     pos = i;
                     break;
@@ -131,8 +133,8 @@ namespace VerificaOOP
         public void ApriConto(string _nome)
         {
             int pos = Ricerca(_nome);
-            arr[pos].apri();
-            arr[pos].Nome=_nome;
+            contos[pos].apri();
+            contos[pos].Nome=_nome;
             Console.WriteLine($"Il conto di {_nome} è stato aperto");
                
             
@@ -140,32 +142,32 @@ namespace VerificaOOP
         public void ChiudiConto(string _nome)
         {
             int pos = Ricerca(_nome);
-            arr[pos].chiudi();
-            arr[pos].Nome = _nome;
+            contos[pos].chiudi();
+            contos[pos].Nome = _nome;
             Console.WriteLine($"Il conto di {_nome} è stato aperto");
         }
         public void DepositaSuConto(string _nome, float c)
         {
             int pos = Ricerca(_nome);
-            arr[pos].deposita(c);
-            Console.WriteLine($"Sul conto sono stati depositati {arr[pos].Saldo} euro");
+            contos[pos].deposita(c);
+            Console.WriteLine($"Sul conto sono stati depositati {contos[pos].Saldo} euro");
         }
 
         public void PrelevaDalConto(string _nome, float c)
         {
             int pos = Ricerca(_nome);
-            arr[pos].preleva(c);
-            Console.WriteLine($"Dal conto sono stati prelevati {arr[pos].Saldo} euro");
+            contos[pos].preleva(c);
+            Console.WriteLine($"Dal conto sono stati prelevati {contos[pos].Saldo} euro");
         }
         public void VediSaldoConto(string _nome)
         {
             int pos = Ricerca(_nome);
-            Console.WriteLine($"Il saldo equivale { arr[pos].saldo()} euro");
+            Console.WriteLine($"Il saldo equivale {contos[pos].saldo()} euro");
         }
         public void VediInfoConto(string _nome)
         {
             int pos = Ricerca(_nome);
-            Console.WriteLine($"Info:\nStato conto:{arr[pos].stato()}\nSaldo:{arr[pos].saldo()} euro");
+            Console.WriteLine($"Info:\nStato conto:{contos[pos].stato()}\nSaldo:{contos[pos].saldo()} euro");
         }
 
     }
@@ -183,7 +185,7 @@ namespace VerificaOOP
             Console.WriteLine("Menu:\n1)Conto\n2)Banca");
             string r=Console.ReadLine();
 
-            banca.Apri();
+            
 
             if(r=="1" || r=="2")
             {
@@ -279,8 +281,8 @@ namespace VerificaOOP
                                 {
                                     Console.WriteLine("Inserisci nome");
                                     nome=Console.ReadLine();
+                                    banca.Apri();
                                     banca.ApriConto(nome);
-                                    Console.WriteLine("Il conto è stato aperto");
                                     Console.ReadLine();
                                 }
                                 break;
